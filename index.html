@@ -1,0 +1,2602 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trust Campus | Student Management System</title>
+    <style>
+      :root {
+        --navy: #14213d;
+        --blue: #2563eb;
+        --blue2: #1d4ed8;
+        --bg: #f4f7fb;
+        --card: #fff;
+        --text: #172033;
+        --muted: #667085;
+        --line: #e6eaf0;
+        --green: #16845b;
+        --amber: #b7791f;
+        --red: #c0392b;
+        --shadow: 0 8px 24px rgba(20, 33, 61, 0.06);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          Segoe UI,
+          Arial,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .app {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 245px;
+        background: var(--navy);
+        color: #fff;
+        padding: 22px 14px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 0 10px 25px;
+        border-bottom: 1px solid #ffffff20;
+      }
+      .brand-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 12px;
+        background: #fff;
+        color: var(--blue);
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        font-size: 20px;
+      }
+      .brand strong {
+        display: block;
+        font-size: 16px;
+      }
+      .brand small {
+        color: #cbd5e1;
+        font-size: 11px;
+      }
+      .nav-label {
+        font-size: 10px;
+        letter-spacing: 1.4px;
+        color: #94a3b8;
+        margin: 23px 12px 9px;
+      }
+      .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #dbe4f0;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: left;
+        margin: 2px 0;
+        font-size: 13px;
+      }
+      .nav-btn:hover,
+      .nav-btn.active {
+        background: #ffffff18;
+        color: #fff;
+      }
+      .nav-btn.active {
+        box-shadow: inset 3px 0 #60a5fa;
+      }
+      .nav-icon {
+        width: 20px;
+        text-align: center;
+        font-size: 16px;
+      }
+      .side-bottom {
+        margin-top: auto;
+        padding: 14px 10px 0;
+        color: #b7c5d9;
+        font-size: 11px;
+        line-height: 1.7;
+      }
+      .main {
+        flex: 1;
+        min-width: 0;
+      }
+      .topbar {
+        height: 76px;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+        gap: 16px;
+      }
+      .top-title {
+        font-weight: 750;
+        font-size: 20px;
+      }
+      .top-sub {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .campus-select {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 10px;
+        background: #fff;
+        color: var(--text);
+        max-width: 190px;
+      }
+      .avatar {
+        height: 38px;
+        width: 38px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 12px;
+      }
+      .content {
+        padding: 26px 30px;
+        max-width: 1600px;
+        margin: auto;
+      }
+      .page-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+      .page-head h1 {
+        font-size: 23px;
+        margin: 0 0 6px;
+      }
+      .page-head p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .btn {
+        border: 1px solid var(--line);
+        background: #fff;
+        padding: 10px 14px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 650;
+        color: var(--text);
+      }
+      .btn:hover {
+        filter: brightness(0.97);
+      }
+      .btn.primary {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: white;
+      }
+      .btn.primary:hover {
+        background: var(--blue2);
+      }
+      .btn.small {
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+      .btn.danger {
+        color: var(--red);
+        border-color: #f1c9c5;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .stat,
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+      .stat {
+        padding: 19px;
+      }
+      .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: #eff6ff;
+        color: var(--blue);
+        font-size: 17px;
+      }
+      .stat-value {
+        font-size: 27px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin: 12px 0 5px;
+      }
+      .stat-foot {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .stat-foot b {
+        color: var(--green);
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1.35fr 1fr;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+      .panel {
+        padding: 20px;
+        min-width: 0;
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 17px;
+      }
+      .panel-head h3 {
+        font-size: 15px;
+        margin: 0;
+      }
+      .panel-head p {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 5px 0 0;
+      }
+      .campus-list {
+        display: grid;
+        gap: 13px;
+      }
+      .campus-row {
+        display: grid;
+        grid-template-columns: 130px 1fr 62px;
+        align-items: center;
+        gap: 12px;
+        font-size: 12px;
+      }
+      .campus-name {
+        font-weight: 650;
+      }
+      .bar {
+        height: 8px;
+        background: #edf0f5;
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        border-radius: 99px;
+        background: var(--blue);
+      }
+      .campus-count {
+        text-align: right;
+        color: var(--muted);
+      }
+      .alert-list {
+        display: grid;
+        gap: 12px;
+      }
+      .alert {
+        display: flex;
+        gap: 11px;
+        padding: 12px;
+        background: #fbfcfe;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      .alert-mark {
+        width: 30px;
+        height: 30px;
+        flex-shrink: 0;
+        border-radius: 9px;
+        display: grid;
+        place-items: center;
+        background: #fff7e6;
+        color: var(--amber);
+      }
+      .alert strong {
+        font-size: 12px;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .alert p {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.5;
+      }
+      .section {
+        display: none;
+      }
+      .section.active {
+        display: block;
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .toolbar input,
+      .toolbar select,
+      .field input,
+      .field select,
+      .field textarea {
+        border: 1px solid #dfe4ec;
+        border-radius: 9px;
+        padding: 10px 12px;
+        background: #fff;
+        outline: none;
+        color: var(--text);
+      }
+      .toolbar input:focus,
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
+        border-color: #8ab4ff;
+        box-shadow: 0 0 0 3px #2563eb14;
+      }
+      .search {
+        min-width: 230px;
+        flex: 1;
+      }
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+        font-size: 12px;
+      }
+      th {
+        text-align: left;
+        background: #f8fafc;
+        color: #667085;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      td {
+        padding: 13px 14px;
+        border-bottom: 1px solid #edf0f5;
+      }
+      tbody tr:hover {
+        background: #fafcff;
+      }
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .student-cell {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .mini-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: #eaf1ff;
+        color: #2455bd;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 10px;
+      }
+      .student-name {
+        font-weight: 700;
+      }
+      .subtext {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+      .badge {
+        display: inline-block;
+        padding: 5px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 750;
+      }
+      .badge.green {
+        background: #e8f7ef;
+        color: #14784e;
+      }
+      .badge.amber {
+        background: #fff4db;
+        color: #966312;
+      }
+      .badge.red {
+        background: #fdecea;
+        color: #b42318;
+      }
+      .badge.blue {
+        background: #eaf1ff;
+        color: #2455bd;
+      }
+      .table-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 11px;
+        padding-top: 14px;
+      }
+      .inline-actions {
+        display: flex;
+        gap: 6px;
+      }
+      .empty {
+        text-align: center;
+        padding: 35px;
+        color: var(--muted);
+      }
+      .cards3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .mini-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        padding: 17px;
+      }
+      .mini-card .label {
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .mini-card .num {
+        font-size: 23px;
+        font-weight: 800;
+        margin-top: 8px;
+      }
+      .mini-card .note {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 5px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+      .field label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #475467;
+      }
+      .field.full {
+        grid-column: 1/-1;
+      }
+      .field textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: #10182880;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        z-index: 20;
+      }
+      .modal-backdrop.show {
+        display: flex;
+      }
+      .modal {
+        background: #fff;
+        border-radius: 16px;
+        width: min(620px, 100%);
+        max-height: 90vh;
+        overflow: auto;
+        box-shadow: 0 25px 80px #0003;
+      }
+      .modal-head {
+        padding: 20px 22px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .modal-head h3 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .close {
+        border: 0;
+        background: #f1f4f8;
+        border-radius: 8px;
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+      }
+      .modal-body {
+        padding: 22px;
+      }
+      .modal-foot {
+        padding: 16px 22px;
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: flex-end;
+        gap: 9px;
+      }
+      .notice {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #1e40af;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+      .toast {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        background: #14213d;
+        color: white;
+        padding: 13px 17px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        font-size: 12px;
+        display: none;
+        z-index: 50;
+      }
+      .toast.show {
+        display: block;
+        animation: fade 3s forwards;
+      }
+      @keyframes fade {
+        0%,
+        75% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .report-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .report-card {
+        padding: 20px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+      }
+      .report-card h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+      .report-card p {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+        min-height: 35px;
+      }
+      .settings-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+        gap: 16px;
+      }
+      .settings-row:last-child {
+        border-bottom: 0;
+      }
+      .settings-row strong {
+        font-size: 13px;
+      }
+      .settings-row p {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 5px 0 0;
+      }
+      .toggle {
+        accent-color: var(--blue);
+        width: 17px;
+        height: 17px;
+      }
+      .mobile-menu {
+        display: none;
+      }
+      .footnote {
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-top: 14px;
+      }
+      @media (max-width: 1050px) {
+        .sidebar {
+          width: 210px;
+        }
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+        .content {
+          padding: 22px;
+        }
+        .topbar {
+          padding: 0 22px;
+        }
+      }
+      @media (max-width: 700px) {
+        .app {
+          display: block;
+        }
+        .sidebar {
+          width: 100%;
+          padding: 12px;
+          position: relative;
+        }
+        .brand {
+          padding-bottom: 12px;
+          border: 0;
+        }
+        .sidebar nav {
+          display: flex;
+          overflow: auto;
+          gap: 5px;
+        }
+        .nav-label,
+        .side-bottom {
+          display: none;
+        }
+        .nav-btn {
+          width: auto;
+          white-space: nowrap;
+          padding: 9px 11px;
+        }
+        .nav-icon {
+          display: none;
+        }
+        .topbar {
+          height: auto;
+          padding: 15px;
+          align-items: flex-start;
+        }
+        .top-title {
+          font-size: 17px;
+        }
+        .top-actions {
+          gap: 6px;
+        }
+        .campus-select {
+          max-width: 135px;
+          padding: 8px;
+          font-size: 11px;
+        }
+        .content {
+          padding: 16px;
+        }
+        .page-head {
+          align-items: flex-start;
+        }
+        .page-head h1 {
+          font-size: 20px;
+        }
+        .stats {
+          gap: 10px;
+        }
+        .stat {
+          padding: 14px;
+        }
+        .stat-value {
+          font-size: 22px;
+        }
+        .cards3,
+        .report-grid {
+          grid-template-columns: 1fr;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .field.full {
+          grid-column: auto;
+        }
+        .campus-row {
+          grid-template-columns: 100px 1fr 45px;
+          gap: 8px;
+        }
+        .panel {
+          padding: 15px;
+        }
+        .page-head .btn {
+          white-space: nowrap;
+        }
+        .top-sub {
+          max-width: 190px;
+        }
+        .avatar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-icon">T</div>
+          <div>
+            <strong>Trust Campus</strong><small>Student Management Suite</small>
+          </div>
+        </div>
+        <div class="nav-label">WORKSPACE</div>
+        <nav>
+          <button class="nav-btn active" data-section="dashboard">
+            <span class="nav-icon">▦</span>Dashboard
+          </button>
+          <button class="nav-btn" data-section="students">
+            <span class="nav-icon">♙</span>Students
+          </button>
+          <button class="nav-btn" data-section="admissions">
+            <span class="nav-icon">＋</span>Admissions
+          </button>
+          <button class="nav-btn" data-section="fees">
+            <span class="nav-icon">₹</span>Fee Management
+          </button>
+          <button class="nav-btn" data-section="attendance">
+            <span class="nav-icon">✓</span>Attendance
+          </button>
+          <button class="nav-btn" data-section="hostel">
+            <span class="nav-icon">⌂</span>Hostel
+          </button>
+          <button class="nav-btn" data-section="scholarships">
+            <span class="nav-icon">☆</span>Scholarships
+          </button>
+          <button class="nav-btn" data-section="reports">
+            <span class="nav-icon">▤</span>Reports
+          </button>
+          <button class="nav-btn" data-section="settings">
+            <span class="nav-icon">⚙</span>Settings
+          </button>
+        </nav>
+        <div class="side-bottom">
+          Six campuses · One student identity<br />Demo mode · Data saved in
+          this browser
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <div class="top-title" id="topTitle">Dashboard</div>
+            <div class="top-sub">
+              Six campuses · Student, fees, attendance and hostel operations
+            </div>
+          </div>
+          <div class="top-actions">
+            <select
+              id="campusFilter"
+              class="campus-select"
+              aria-label="Select campus"
+            >
+              <option value="All">All campuses</option>
+            </select>
+            <div class="avatar">TA</div>
+          </div>
+        </header>
+        <div class="content">
+          <section class="section active" id="dashboard">
+            <div class="page-head">
+              <div>
+                <h1>Administrator</h1>
+                <p>Here is the latest overview of your educational trust.</p>
+              </div>
+              <button class="btn primary" onclick="openStudentModal()">
+                ＋ Add student
+              </button>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-top">
+                  Total students <span class="stat-icon">♙</span>
+                </div>
+                <div class="stat-value" id="statStudents">14,000</div>
+                <div class="stat-foot"><b>Across 6 campuses</b></div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Fees outstanding <span class="stat-icon">₹</span>
+                </div>
+                <div class="stat-value" id="statFees">₹0</div>
+                <div class="stat-foot">Pending student balances</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Attendance average <span class="stat-icon">✓</span>
+                </div>
+                <div class="stat-value" id="statAttendance">88.4%</div>
+                <div class="stat-foot">Illustrative demo calculation</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Hostel occupancy <span class="stat-icon">⌂</span>
+                </div>
+                <div class="stat-value" id="statHostel">78%</div>
+                <div class="stat-foot">Of available beds</div>
+              </div>
+            </div>
+            <div class="grid2">
+              <div class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h3>Campus overview</h3>
+                    <p>Student strength by campus</p>
+                  </div>
+                  <button class="btn small" onclick="showSection('reports')">
+                    View reports
+                  </button>
+                </div>
+                <div class="campus-list" id="campusBars"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h3>Needs attention</h3>
+                    <p>Items for the administration team</p>
+                  </div>
+                  <span class="badge amber">Demo alerts</span>
+                </div>
+                <div class="alert-list">
+                  <div class="alert">
+                    <div class="alert-mark">₹</div>
+                    <div>
+                      <strong>Fee follow-ups</strong>
+                      <p id="alertFees">
+                        Review outstanding student balances and send verified
+                        reminders.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="alert">
+                    <div class="alert-mark">✓</div>
+                    <div>
+                      <strong>Attendance eligibility</strong>
+                      <p>
+                        Review students with attendance below the configured
+                        threshold.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="alert">
+                    <div class="alert-mark">⌂</div>
+                    <div>
+                      <strong>Hostel capacity</strong>
+                      <p>
+                        Confirm bed availability before allocating new
+                        residents.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>Recently added students</h3>
+                  <p>Latest records in this browser</p>
+                </div>
+                <button class="btn small" onclick="showSection('students')">
+                  View all students
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Student ID</th>
+                      <th>Campus</th>
+                      <th>Programme</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentRows"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="students">
+            <div class="page-head">
+              <div>
+                <h1>Students</h1>
+                <p>Search and manage student records across all campuses.</p>
+              </div>
+              <button class="btn primary" onclick="openStudentModal()">
+                ＋ Add student
+              </button>
+            </div>
+            <div class="panel">
+              <div class="toolbar">
+                <input
+                  id="studentSearch"
+                  class="search"
+                  placeholder="Search name, student ID, email or phone…"
+                /><select id="studentCampus">
+                  <option value="All">All campuses</option></select
+                ><select id="studentStatus">
+                  <option value="All">All statuses</option>
+                  <option>Active</option>
+                  <option>Pending</option>
+                  <option>Inactive</option></select
+                ><button class="btn" onclick="exportStudents()">
+                  Export CSV
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Student ID</th>
+                      <th>Campus</th>
+                      <th>Programme</th>
+                      <th>Fee balance</th>
+                      <th>Attendance</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="studentRows"></tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <span id="studentCount">Showing records</span>
+                <div class="inline-actions">
+                  <button class="btn small" id="prevPage">Previous</button
+                  ><button class="btn small" id="nextPage">Next</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="admissions">
+            <div class="page-head">
+              <div>
+                <h1>Admissions</h1>
+                <p>Register new students and track admission status.</p>
+              </div>
+              <button class="btn primary" onclick="openStudentModal()">
+                ＋ New admission
+              </button>
+            </div>
+            <div class="cards3">
+              <div class="mini-card">
+                <div class="label">Total student records</div>
+                <div class="num" id="admTotal">14,000</div>
+                <div class="note">Across the trust</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Pending admissions</div>
+                <div class="num" id="admPending">0</div>
+                <div class="note">Records requiring follow-up</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Active students</div>
+                <div class="num" id="admActive">0</div>
+                <div class="note">Current active status</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>Admission workflow</h3>
+                  <p>
+                    Use the form to add a record to the local demo database.
+                  </p>
+                </div>
+              </div>
+              <div class="notice">
+                This is a frontend demonstration. Records are stored in your
+                browser using localStorage; they are not shared between devices
+                or users.
+              </div>
+              <button class="btn primary" onclick="openStudentModal()">
+                Create student admission
+              </button>
+            </div>
+          </section>
+
+          <section class="section" id="fees">
+            <div class="page-head">
+              <div>
+                <h1>Fee management</h1>
+                <p>Review balances and record a demo payment.</p>
+              </div>
+              <button class="btn" onclick="exportFees()">
+                Export fee report
+              </button>
+            </div>
+            <div class="cards3">
+              <div class="mini-card">
+                <div class="label">Total fee due</div>
+                <div class="num" id="feeDue">₹0</div>
+                <div class="note">Current outstanding balance</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Students with balance</div>
+                <div class="num" id="feeStudents">0</div>
+                <div class="note">Require follow-up</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Recorded demo payments</div>
+                <div class="num" id="feePayments">0</div>
+                <div class="note">Saved in this browser</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="toolbar">
+                <input
+                  class="search"
+                  id="feeSearch"
+                  placeholder="Search student or ID…"
+                /><select id="feeCampus">
+                  <option value="All">All campuses</option></select
+                ><select id="feeType" aria-label="Choose fee type">
+                  <option value="All">All fee types</option>
+                  <option value="tuition">Tuition fee</option>
+                  <option value="bus">Bus fee</option>
+                  <option value="examination">Examination fee</option>
+                  <option value="hostel">Hostel fee</option></select
+                ><select id="feeStatus">
+                  <option value="All">All balances</option>
+                  <option value="Due">Has due</option>
+                  <option value="Clear">No due</option></select
+                ><button class="btn" onclick="exportFees()">Export CSV</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Campus</th>
+                      <th id="feeColumnTitle">Total fees</th>
+                      <th>Paid</th>
+                      <th>Balance</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="feeRows"></tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <span id="feeCount"></span
+                ><span
+                  >Choose a fee type to view or record a specific fee
+                  payment.</span
+                >
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="attendance">
+            <div class="page-head">
+              <div>
+                <h1>Attendance</h1>
+                <p>
+                  Review attendance and flag students below the configured
+                  threshold.
+                </p>
+              </div>
+              <button class="btn" onclick="exportAttendance()">
+                Export attendance
+              </button>
+            </div>
+            <div class="cards3">
+              <div class="mini-card">
+                <div class="label">Average attendance</div>
+                <div class="num" id="attAverage">88.4%</div>
+                <div class="note">Across displayed records</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Below 75% threshold</div>
+                <div class="num" id="attRisk">0</div>
+                <div class="note">Needs review</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Students tracked</div>
+                <div class="num" id="attTotal">0</div>
+                <div class="note">Attendance percentages are demo values</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="toolbar">
+                <input
+                  class="search"
+                  id="attendanceSearch"
+                  placeholder="Search student or ID…"
+                /><select id="attendanceCampus">
+                  <option value="All">All campuses</option></select
+                ><select id="attendanceStatus">
+                  <option value="All">All attendance</option>
+                  <option value="Risk">Below 75%</option>
+                  <option value="Eligible">75% and above</option>
+                </select>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Campus</th>
+                      <th>Programme</th>
+                      <th>Attendance</th>
+                      <th>Eligibility</th>
+                    </tr>
+                  </thead>
+                  <tbody id="attendanceRows"></tbody>
+                </table>
+              </div>
+              <div class="table-footer">
+                <span id="attendanceCount"></span
+                ><span>Threshold can be changed in Settings.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="hostel">
+            <div class="page-head">
+              <div>
+                <h1>Hostel management</h1>
+                <p>Monitor hostel beds, allocations, and campus occupancy.</p>
+              </div>
+              <button class="btn" onclick="exportHostel()">
+                Export hostel report
+              </button>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat-top">
+                  Total beds <span class="stat-icon">⌂</span>
+                </div>
+                <div class="stat-value" id="hostelBeds">4,200</div>
+                <div class="stat-foot">Across six campuses</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Allocated beds <span class="stat-icon">✓</span>
+                </div>
+                <div class="stat-value" id="hostelAllocated">3,276</div>
+                <div class="stat-foot">Illustrative allocation data</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Available beds <span class="stat-icon">＋</span>
+                </div>
+                <div class="stat-value" id="hostelAvailable">924</div>
+                <div class="stat-foot">Subject to local confirmation</div>
+              </div>
+              <div class="stat">
+                <div class="stat-top">
+                  Occupancy <span class="stat-icon">▥</span>
+                </div>
+                <div class="stat-value" id="hostelRate">78%</div>
+                <div class="stat-foot">Allocated / total beds</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>Campus hostel capacity</h3>
+                  <p>
+                    Example capacity values; replace with verified campus data.
+                  </p>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Campus</th>
+                      <th>Total beds</th>
+                      <th>Allocated</th>
+                      <th>Available</th>
+                      <th>Occupancy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="hostelRows"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="scholarships">
+            <div class="page-head">
+              <div>
+                <h1>Scholarships & reimbursements</h1>
+                <p>
+                  Track sample scholarship claims and government reimbursements.
+                </p>
+              </div>
+              <button class="btn primary" onclick="addScholarship()">
+                ＋ Add sample claim
+              </button>
+            </div>
+            <div class="cards3">
+              <div class="mini-card">
+                <div class="label">Claims recorded</div>
+                <div class="num" id="schCount">0</div>
+                <div class="note">Local demo records</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Pending review</div>
+                <div class="num" id="schPending">0</div>
+                <div class="note">Needs administrator review</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">Claim amount</div>
+                <div class="num" id="schAmount">₹0</div>
+                <div class="note">Illustrative amount</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="notice">
+                Sample claims are fictional. Do not enter real sensitive student
+                or bank information into this frontend demo.
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Claim ID</th>
+                      <th>Student ID</th>
+                      <th>Campus</th>
+                      <th>Scheme</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="schRows"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="reports">
+            <div class="page-head">
+              <div>
+                <h1>Reports & exports</h1>
+                <p>
+                  Generate CSV files for analysis in Excel or Google Sheets.
+                </p>
+              </div>
+            </div>
+            <div class="report-grid">
+              <div class="report-card">
+                <h3>Student master report</h3>
+                <p>
+                  Student identity, campus, programme, status, contact fields
+                  and attendance.
+                </p>
+                <button class="btn primary" onclick="exportStudents()">
+                  Download student CSV
+                </button>
+              </div>
+              <div class="report-card">
+                <h3>Outstanding fee report</h3>
+                <p>
+                  Annual fee, paid amount and remaining balance for each
+                  student.
+                </p>
+                <button class="btn primary" onclick="exportFees()">
+                  Download fee CSV
+                </button>
+              </div>
+              <div class="report-card">
+                <h3>Attendance eligibility report</h3>
+                <p>
+                  Attendance percentage and students below the configured
+                  threshold.
+                </p>
+                <button class="btn primary" onclick="exportAttendance()">
+                  Download attendance CSV
+                </button>
+              </div>
+              <div class="report-card">
+                <h3>Hostel occupancy report</h3>
+                <p>
+                  Total beds, allocated beds, vacancies and occupancy by campus.
+                </p>
+                <button class="btn primary" onclick="exportHostel()">
+                  Download hostel CSV
+                </button>
+              </div>
+            </div>
+            <p class="footnote">
+              Exports are generated locally in your browser. They contain
+              synthetic demo records and any records you add in this browser.
+            </p>
+          </section>
+
+          <section class="section" id="settings">
+            <div class="page-head">
+              <div>
+                <h1>Settings</h1>
+                <p>Configure local demo preferences and sample data.</p>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="settings-row">
+                <div>
+                  <strong>Attendance eligibility threshold</strong>
+                  <p>Students below this percentage are flagged for review.</p>
+                </div>
+                <div>
+                  <input
+                    id="thresholdInput"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value="75"
+                    style="
+                      width: 85px;
+                      padding: 9px;
+                      border: 1px solid var(--line);
+                      border-radius: 8px;
+                    "
+                  />
+                  %
+                  <button class="btn small" onclick="saveThreshold()">
+                    Save
+                  </button>
+                </div>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <strong>Restore synthetic demo data</strong>
+                  <p>
+                    Rebuilds the original 14,000 fictional student records. Your
+                    locally added changes will be replaced.
+                  </p>
+                </div>
+                <button class="btn" onclick="resetDemo()">
+                  Restore demo data
+                </button>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <strong>Clear browser data</strong>
+                  <p>Removes this app's saved records from this browser.</p>
+                </div>
+                <button class="btn danger" onclick="clearData()">
+                  Clear data
+                </button>
+              </div>
+              <div class="settings-row">
+                <div>
+                  <strong>About this prototype</strong>
+                  <p>
+                    Frontend-only demo; no server login, central database, or
+                    real messaging is connected.
+                  </p>
+                </div>
+                <span class="badge blue">Prototype v1.0</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="studentModal">
+      <div class="modal">
+        <div class="modal-head">
+          <h3 id="modalTitle">Add student</h3>
+          <button class="close" onclick="closeModal()">×</button>
+        </div>
+        <form id="studentForm">
+          <div class="modal-body">
+            <div class="notice">
+              Use fictional data for testing. A real deployment needs a secure
+              backend and access controls.
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label for="fName">Full name *</label
+                ><input
+                  id="fName"
+                  required
+                  maxlength="80"
+                  placeholder="Student full name"
+                />
+              </div>
+              <div class="field">
+                <label for="fCampus">Campus *</label
+                ><select id="fCampus" required></select>
+              </div>
+              <div class="field">
+                <label for="fProgramme">Programme *</label
+                ><select id="fProgramme" required>
+                  <option>Engineering</option>
+                  <option>Polytechnic</option>
+                  <option>School</option>
+                  <option>Management</option>
+                  <option>Science</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="fYear">Year / class</label
+                ><input id="fYear" placeholder="e.g. 2nd Year" />
+              </div>
+              <div class="field">
+                <label for="fEmail">Email</label
+                ><input
+                  id="fEmail"
+                  type="email"
+                  placeholder="student@example.com"
+                />
+              </div>
+              <div class="field">
+                <label for="fPhone">Phone</label
+                ><input
+                  id="fPhone"
+                  type="tel"
+                  pattern="[0-9+ ()-]{7,18}"
+                  placeholder="Phone number"
+                />
+              </div>
+              <div class="field">
+                <label for="fFee">Annual fee (₹)</label
+                ><input id="fFee" type="number" min="0" value="60000" />
+              </div>
+              <div class="field">
+                <label for="fPaid">Amount paid (₹)</label
+                ><input id="fPaid" type="number" min="0" value="0" />
+              </div>
+              <div class="field">
+                <label for="fAttendance">Attendance (%)</label
+                ><input
+                  id="fAttendance"
+                  type="number"
+                  min="0"
+                  max="100"
+                  value="90"
+                />
+              </div>
+              <div class="field">
+                <label for="fStatus">Status</label
+                ><select id="fStatus">
+                  <option>Active</option>
+                  <option>Pending</option>
+                  <option>Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button type="button" class="btn" onclick="closeModal()">
+              Cancel</button
+            ><button type="submit" class="btn primary">Save student</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-backdrop" id="paymentModal">
+      <div class="modal">
+        <div class="modal-head">
+          <h3>Record demo payment</h3>
+          <button class="close" onclick="closePayment()">×</button>
+        </div>
+        <form id="paymentForm">
+          <div class="modal-body">
+            <div id="paymentStudentInfo" class="notice"></div>
+            <input id="paymentStudentId" type="hidden" />
+            <div class="field">
+              <label for="paymentFeeType">Fee type *</label
+              ><select id="paymentFeeType" required>
+                <option value="tuition">Tuition fee</option>
+                <option value="bus">Bus fee</option>
+                <option value="examination">Examination fee</option>
+                <option value="hostel">Hostel fee</option>
+              </select>
+            </div>
+            <div class="field" style="margin-top: 14px">
+              <label for="paymentAmount">Payment amount (₹) *</label
+              ><input id="paymentAmount" type="number" min="1" required />
+            </div>
+            <div class="field" style="margin-top: 14px">
+              <label for="paymentMethod">Payment method</label
+              ><select id="paymentMethod">
+                <option>UPI (demo)</option>
+                <option>Cash (demo)</option>
+                <option>Bank transfer (demo)</option>
+                <option>Card (demo)</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-foot">
+            <button type="button" class="btn" onclick="closePayment()">
+              Cancel</button
+            ><button type="submit" class="btn primary">Record payment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script>
+      const CAMPUSES = [
+        "Central Engineering College",
+        "North Polytechnic",
+        "South School Campus",
+        "East Engineering College",
+        "West Polytechnic",
+        "Trust Public School",
+      ];
+      const FEE_TYPES = {
+        tuition: "Tuition fee",
+        bus: "Bus fee",
+        examination: "Examination fee",
+        hostel: "Hostel fee",
+      };
+      const FEE_SHARES = {
+        tuition: 0.65,
+        bus: 0.1,
+        examination: 0.05,
+        hostel: 0.2,
+      };
+      const CAMPUS_SHORT = [
+        "Central Engineering",
+        "North Polytechnic",
+        "South School",
+        "East Engineering",
+        "West Polytechnic",
+        "Trust Public School",
+      ];
+      const PROGRAMMES = [
+        "Engineering",
+        "Polytechnic",
+        "School",
+        "Management",
+        "Science",
+      ];
+      const FIRST = [
+        "Aarav",
+        "Aditi",
+        "Akash",
+        "Ananya",
+        "Arjun",
+        "Bhavana",
+        "Charan",
+        "Deepa",
+        "Dev",
+        "Divya",
+        "Ganesh",
+        "Harsha",
+        "Ishita",
+        "Kavya",
+        "Kiran",
+        "Lakshmi",
+        "Manoj",
+        "Meera",
+        "Naveen",
+        "Nisha",
+        "Pavan",
+        "Priya",
+        "Rahul",
+        "Rashmi",
+        "Rohan",
+        "Sahana",
+        "Sanjay",
+        "Shreya",
+        "Sneha",
+        "Tejas",
+        "Varun",
+        "Vidya",
+        "Vikram",
+        "Yash",
+      ];
+      const LAST = [
+        "Sharma",
+        "Nayak",
+        "Patil",
+        "Reddy",
+        "Kumar",
+        "Shetty",
+        "Rao",
+        "Gowda",
+        "Bhat",
+        "Joshi",
+        "Verma",
+        "Hegde",
+        "Naidu",
+        "Kulkarni",
+        "Poojari",
+        "Murthy",
+        "Das",
+        "Singh",
+        "Iyer",
+        "Menon",
+      ];
+      const HOSTEL_BEDS = [900, 650, 700, 800, 600, 550];
+      let students = [],
+        payments = [],
+        scholarships = [],
+        page = 0,
+        editingId = null,
+        threshold = 75;
+      const PAGE_SIZE = 50;
+      const money = (n) =>
+        "₹" + Math.round(Number(n) || 0).toLocaleString("en-IN");
+      const fmt = (n) => Number(n || 0).toLocaleString("en-IN");
+      const escapeHTML = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      function seeded(i) {
+        let x = Math.sin(i * 127.1 + 311.7) * 43758.5453;
+        return x - Math.floor(x);
+      }
+      function makeStudent(i) {
+        const c = i % 6,
+          fee =
+            [85000, 48000, 35000, 90000, 52000, 28000][c] +
+            Math.floor(seeded(i + 4) * 12000);
+        const paid = Math.floor(
+          fee *
+            (seeded(i + 8) > 0.25
+              ? 0.25 + seeded(i + 9) * 0.75
+              : seeded(i + 10) * 0.25),
+        );
+        return {
+          id: "TR" + String(i + 1).padStart(5, "0"),
+          name:
+            FIRST[Math.floor(seeded(i + 1) * FIRST.length)] +
+            " " +
+            LAST[Math.floor(seeded(i + 2) * LAST.length)],
+          campus: CAMPUSES[c],
+          programme: [
+            "Engineering",
+            "Polytechnic",
+            "School",
+            "Engineering",
+            "Polytechnic",
+            "School",
+          ][c],
+          year: ["1st Year", "2nd Year", "3rd Year", "4th Year"][
+            Math.floor(seeded(i + 3) * 4)
+          ],
+          email: "student" + String(i + 1) + "@demo.edu",
+          phone:
+            "9" +
+            String(100000000 + Math.floor(seeded(i + 5) * 899999999)).slice(
+              0,
+              9,
+            ),
+          fee,
+          paid,
+          attendance: Math.round(55 + seeded(i + 11) * 45),
+          status:
+            seeded(i + 12) > 0.035
+              ? "Active"
+              : seeded(i + 13) > 0.5
+                ? "Pending"
+                : "Inactive",
+          created: i,
+        };
+      }
+      function loadData() {
+        try {
+          const saved = localStorage.getItem("trustCampusStudents");
+          if (saved) {
+            students = JSON.parse(saved);
+          } else {
+            students = Array.from({ length: 14000 }, (_, i) => makeStudent(i));
+            saveData();
+          }
+          payments = JSON.parse(
+            localStorage.getItem("trustCampusPayments") || "[]",
+          );
+          scholarships = JSON.parse(
+            localStorage.getItem("trustCampusScholarships") || "null",
+          ) || [
+            {
+              id: "CLM-001",
+              studentId: "TR00120",
+              campus: CAMPUSES[0],
+              scheme: "Government scholarship",
+              amount: 18000,
+              status: "Pending",
+            },
+            {
+              id: "CLM-002",
+              studentId: "TR03522",
+              campus: CAMPUSES[2],
+              scheme: "Fee reimbursement",
+              amount: 12500,
+              status: "Under review",
+            },
+            {
+              id: "CLM-003",
+              studentId: "TR07840",
+              campus: CAMPUSES[4],
+              scheme: "Merit scholarship",
+              amount: 20000,
+              status: "Approved",
+            },
+          ];
+          threshold = Number(
+            localStorage.getItem("trustCampusThreshold") || 75,
+          );
+        } catch (e) {
+          students = Array.from({ length: 14000 }, (_, i) => makeStudent(i));
+          payments = [];
+          scholarships = [];
+          saveData();
+        }
+      }
+      function saveData() {
+        try {
+          localStorage.setItem("trustCampusStudents", JSON.stringify(students));
+          localStorage.setItem("trustCampusPayments", JSON.stringify(payments));
+          localStorage.setItem(
+            "trustCampusScholarships",
+            JSON.stringify(scholarships),
+          );
+          localStorage.setItem("trustCampusThreshold", String(threshold));
+        } catch (e) {
+          toast("Browser storage is full. Export data and reduce records.");
+        }
+      }
+      function initSelects() {
+        const opts = CAMPUSES.map(
+          (c) => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`,
+        ).join("");
+        [
+          "campusFilter",
+          "studentCampus",
+          "feeCampus",
+          "attendanceCampus",
+        ].forEach((id) => {
+          document.getElementById(id).insertAdjacentHTML("beforeend", opts);
+        });
+        document.getElementById("fCampus").innerHTML = opts;
+      }
+      function showSection(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.toggle("active", s.id === id));
+        document
+          .querySelectorAll(".nav-btn")
+          .forEach((b) =>
+            b.classList.toggle("active", b.dataset.section === id),
+          );
+        const names = {
+          dashboard: "Trust overview",
+          students: "Student directory",
+          admissions: "Admissions",
+          fees: "Fee management",
+          attendance: "Attendance",
+          hostel: "Hostel management",
+          scholarships: "Scholarships & reimbursements",
+          reports: "Reports & exports",
+          settings: "Settings",
+        };
+        document.getElementById("topTitle").textContent =
+          names[id] || "Trust Campus";
+        if (id === "students") renderStudents();
+        if (id === "fees") renderFees();
+        if (id === "attendance") renderAttendance();
+        if (id === "hostel") renderHostel();
+        if (id === "scholarships") renderScholarships();
+        if (id === "admissions") renderAdmissions();
+      }
+      document
+        .querySelectorAll(".nav-btn")
+        .forEach((b) =>
+          b.addEventListener("click", () => showSection(b.dataset.section)),
+        );
+      document
+        .getElementById("campusFilter")
+        .addEventListener("change", renderDashboard);
+      function filteredCampus(list, selectId) {
+        const c = document.getElementById(selectId)?.value || "All";
+        return c === "All" ? list : list.filter((s) => s.campus === c);
+      }
+      function sum(list, fn) {
+        return list.reduce((a, x) => a + fn(x), 0);
+      }
+      function renderDashboard() {
+        const list = filteredCampus(students, "campusFilter"),
+          due = sum(list, (s) => Math.max(0, s.fee - s.paid)),
+          avg = list.length ? sum(list, (s) => s.attendance) / list.length : 0;
+        document.getElementById("statStudents").textContent = fmt(list.length);
+        document.getElementById("statFees").textContent = money(due);
+        document.getElementById("statAttendance").textContent =
+          avg.toFixed(1) + "%";
+        let totalBeds = 0,
+          alloc = 0;
+        CAMPUSES.forEach((c, i) => {
+          if (
+            document.getElementById("campusFilter").value === "All" ||
+            document.getElementById("campusFilter").value === c
+          ) {
+            totalBeds += HOSTEL_BEDS[i];
+            alloc += Math.round(
+              HOSTEL_BEDS[i] * [0.81, 0.74, 0.82, 0.77, 0.76, 0.78][i],
+            );
+          }
+        });
+        document.getElementById("statHostel").textContent =
+          (totalBeds ? Math.round((alloc / totalBeds) * 100) : 0) + "%";
+        document.getElementById("alertFees").textContent =
+          fmt(list.filter((s) => s.fee > s.paid).length) +
+          " students have an outstanding fee balance in the selected view.";
+        const bars = document.getElementById("campusBars");
+        const allCounts = CAMPUSES.map((c) => ({
+          c,
+          n: list.filter((s) => s.campus === c).length,
+        }));
+        const max = Math.max(1, ...allCounts.map((x) => x.n));
+        bars.innerHTML = allCounts
+          .map(
+            (x) =>
+              `<div class="campus-row"><div class="campus-name">${escapeHTML(x.c)}</div><div class="bar"><span style="width:${(x.n / max) * 100}%"></span></div><div class="campus-count">${fmt(x.n)}</div></div>`,
+          )
+          .join("");
+        document.getElementById("recentRows").innerHTML = students
+          .slice(-5)
+          .reverse()
+          .map(
+            (s) =>
+              `<tr><td><div class="student-cell"><div class="mini-avatar">${initials(s.name)}</div><div><div class="student-name">${escapeHTML(s.name)}</div><div class="subtext">${escapeHTML(s.email)}</div></div></div></td><td>${s.id}</td><td>${escapeHTML(s.campus)}</td><td>${escapeHTML(s.programme)}</td><td>${statusBadge(s.status)}</td></tr>`,
+          )
+          .join("");
+      }
+      function initials(n) {
+        return String(n || "?")
+          .split(/\s+/)
+          .slice(0, 2)
+          .map((x) => x[0] || "")
+          .join("")
+          .toUpperCase();
+      }
+      function statusBadge(s) {
+        const cl =
+          s === "Active" || s === "Approved"
+            ? "green"
+            : s === "Pending" || s === "Under review"
+              ? "amber"
+              : "red";
+        return `<span class="badge ${cl}">${escapeHTML(s)}</span>`;
+      }
+      function attendanceBadge(n) {
+        return `<span class="badge ${n < threshold ? "red" : "green"}">${n < threshold ? "At risk" : "Eligible"}</span>`;
+      }
+      function renderStudents() {
+        let list = filteredCampus(students, "studentCampus"),
+          q = document.getElementById("studentSearch").value.toLowerCase(),
+          st = document.getElementById("studentStatus").value;
+        list = list.filter(
+          (s) =>
+            (!q ||
+              [s.name, s.id, s.email, s.phone].some((v) =>
+                String(v).toLowerCase().includes(q),
+              )) &&
+            (st === "All" || s.status === st),
+        );
+        const total = list.length;
+        const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        page = Math.min(page, pages - 1);
+        const shown = list.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+        document.getElementById("studentRows").innerHTML = shown.length
+          ? shown
+              .map(
+                (s) =>
+                  `<tr><td><div class="student-cell"><div class="mini-avatar">${initials(s.name)}</div><div><div class="student-name">${escapeHTML(s.name)}</div><div class="subtext">${escapeHTML(s.email)}</div></div></div></td><td>${s.id}</td><td>${escapeHTML(s.campus)}</td><td>${escapeHTML(s.programme)}</td><td>${money(Math.max(0, s.fee - s.paid))}</td><td>${s.attendance}%</td><td>${statusBadge(s.status)}</td><td><div class="inline-actions"><button class="btn small" onclick="editStudent('${s.id}')">Edit</button><button class="btn small danger" onclick="deleteStudent('${s.id}')">Delete</button></div></td></tr>`,
+              )
+              .join("")
+          : `<tr><td colspan="8" class="empty">No students match your search.</td></tr>`;
+        document.getElementById("studentCount").textContent =
+          `Showing ${total ? page * PAGE_SIZE + 1 : 0}–${Math.min((page + 1) * PAGE_SIZE, total)} of ${fmt(total)} students`;
+        document.getElementById("prevPage").disabled = page === 0;
+        document.getElementById("nextPage").disabled = page >= pages - 1;
+      }
+      ["studentSearch", "studentCampus", "studentStatus"].forEach((id) =>
+        document
+          .getElementById(id)
+          .addEventListener(id === "studentSearch" ? "input" : "change", () => {
+            page = 0;
+            renderStudents();
+          }),
+      );
+      document.getElementById("prevPage").onclick = () => {
+        page = Math.max(0, page - 1);
+        renderStudents();
+      };
+      document.getElementById("nextPage").onclick = () => {
+        page++;
+        renderStudents();
+      };
+      function openStudentModal(id = null) {
+        editingId = id;
+        document.getElementById("studentForm").reset();
+        document.getElementById("modalTitle").textContent = id
+          ? "Edit student"
+          : "Add student";
+        document.getElementById("fFee").value = 60000;
+        document.getElementById("fPaid").value = 0;
+        document.getElementById("fAttendance").value = 90;
+        document.getElementById("fStatus").value = "Active";
+        if (id) {
+          const s = students.find((x) => x.id === id);
+          if (!s) return;
+          document.getElementById("fName").value = s.name;
+          document.getElementById("fCampus").value = s.campus;
+          document.getElementById("fProgramme").value = s.programme;
+          document.getElementById("fYear").value = s.year || "";
+          document.getElementById("fEmail").value = s.email || "";
+          document.getElementById("fPhone").value = s.phone || "";
+          document.getElementById("fFee").value = s.fee;
+          document.getElementById("fPaid").value = s.paid;
+          document.getElementById("fAttendance").value = s.attendance;
+          document.getElementById("fStatus").value = s.status;
+        }
+        document.getElementById("studentModal").classList.add("show");
+      }
+      function closeModal() {
+        document.getElementById("studentModal").classList.remove("show");
+      }
+      document.getElementById("studentForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const fee = Number(document.getElementById("fFee").value),
+          paid = Number(document.getElementById("fPaid").value),
+          att = Number(document.getElementById("fAttendance").value);
+        if (paid > fee) {
+          toast("Amount paid cannot exceed the annual fee.");
+          return;
+        }
+        if (att < 0 || att > 100) {
+          toast("Attendance must be between 0 and 100.");
+          return;
+        }
+        const data = {
+          name: document.getElementById("fName").value.trim(),
+          campus: document.getElementById("fCampus").value,
+          programme: document.getElementById("fProgramme").value,
+          year: document.getElementById("fYear").value.trim(),
+          email: document.getElementById("fEmail").value.trim(),
+          phone: document.getElementById("fPhone").value.trim(),
+          fee,
+          paid,
+          attendance: att,
+          status: document.getElementById("fStatus").value,
+        };
+        if (editingId) {
+          Object.assign(
+            students.find((s) => s.id === editingId),
+            data,
+          );
+          toast("Student record updated.");
+        } else {
+          const next =
+            Math.max(
+              0,
+              ...students.map((s) => Number(s.id.replace(/\D/g, "")) || 0),
+            ) + 1;
+          students.push({
+            ...data,
+            id: "TR" + String(next).padStart(5, "0"),
+            created: Date.now(),
+          });
+          toast("Student admission added.");
+        }
+        saveData();
+        closeModal();
+        refreshAll();
+        showSection("students");
+      });
+      function editStudent(id) {
+        openStudentModal(id);
+      }
+      function deleteStudent(id) {
+        const s = students.find((x) => x.id === id);
+        if (!s) return;
+        if (confirm(`Delete ${s.name} (${id}) from this browser demo?`)) {
+          students = students.filter((x) => x.id !== id);
+          saveData();
+          refreshAll();
+          renderStudents();
+          toast("Student record deleted.");
+        }
+      }
+      function renderAdmissions() {
+        document.getElementById("admTotal").textContent = fmt(students.length);
+        document.getElementById("admPending").textContent = fmt(
+          students.filter((s) => s.status === "Pending").length,
+        );
+        document.getElementById("admActive").textContent = fmt(
+          students.filter((s) => s.status === "Active").length,
+        );
+      }
+      function feeBreakdown(s) {
+        const total = Math.max(0, Number(s.fee) || 0);
+        const fees = {
+          tuition: Math.round(total * FEE_SHARES.tuition),
+          bus: Math.round(total * FEE_SHARES.bus),
+          examination: Math.round(total * FEE_SHARES.examination),
+          hostel: 0,
+        };
+        fees.hostel = Math.max(
+          0,
+          total - fees.tuition - fees.bus - fees.examination,
+        );
+        const studentPayments = payments.filter((p) => p.studentId === s.id);
+        const recorded = studentPayments.reduce(
+          (a, p) => a + (Number(p.amount) || 0),
+          0,
+        );
+        const initialPaid = Math.max(0, (Number(s.paid) || 0) - recorded);
+        const paid = {};
+        let allocated = 0;
+        Object.keys(FEE_TYPES).forEach((type, index, arr) => {
+          const base =
+            index === arr.length - 1
+              ? Math.max(0, initialPaid - allocated)
+              : Math.round(initialPaid * FEE_SHARES[type]);
+          allocated += base;
+          const categoryPayments = studentPayments
+            .filter((p) => p.feeType === type)
+            .reduce((a, p) => a + (Number(p.amount) || 0), 0);
+          paid[type] = Math.min(fees[type], base + categoryPayments);
+        });
+        return { fees, paid };
+      }
+      function getFeeNumbers(s, type) {
+        if (type === "All")
+          return { fee: Number(s.fee) || 0, paid: Number(s.paid) || 0 };
+        const b = feeBreakdown(s);
+        return { fee: b.fees[type] || 0, paid: b.paid[type] || 0 };
+      }
+      function renderFees() {
+        let list = filteredCampus(students, "feeCampus"),
+          q = document.getElementById("feeSearch").value.toLowerCase(),
+          st = document.getElementById("feeStatus").value,
+          type = document.getElementById("feeType").value;
+        document.getElementById("feeColumnTitle").textContent =
+          type === "All" ? "Total fees" : FEE_TYPES[type];
+        list = list.filter((s) => {
+          const n = getFeeNumbers(s, type);
+          return (
+            (!q ||
+              s.name.toLowerCase().includes(q) ||
+              s.id.toLowerCase().includes(q)) &&
+            (st === "All" || (st === "Due" ? n.fee > n.paid : n.fee <= n.paid))
+          );
+        });
+        const all = filteredCampus(students, "feeCampus");
+        document.getElementById("feeDue").textContent = money(
+          sum(all, (s) => {
+            const n = getFeeNumbers(s, type);
+            return Math.max(0, n.fee - n.paid);
+          }),
+        );
+        document.getElementById("feeStudents").textContent = fmt(
+          all.filter((s) => {
+            const n = getFeeNumbers(s, type);
+            return n.fee > n.paid;
+          }).length,
+        );
+        document.getElementById("feePayments").textContent = fmt(
+          payments.length,
+        );
+        document.getElementById("feeRows").innerHTML =
+          list
+            .slice(0, 200)
+            .map((s) => {
+              const n = getFeeNumbers(s, type),
+                balance = Math.max(0, n.fee - n.paid);
+              return `<tr><td><div class="student-name">${escapeHTML(s.name)}</div><div class="subtext">${s.id}</div></td><td>${escapeHTML(s.campus)}</td><td>${money(n.fee)}</td><td>${money(n.paid)}</td><td>${money(balance)}</td><td>${balance > 0 ? `<button class="btn small primary" onclick="openPayment('${s.id}')">Record payment</button>` : '<span class="badge green">Clear</span>'}</td></tr>`;
+            })
+            .join("") ||
+          `<tr><td colspan="6" class="empty">No fee records match your search.</td></tr>`;
+        document.getElementById("feeCount").textContent =
+          `Showing ${Math.min(list.length, 200)} of ${fmt(list.length)} records${list.length > 200 ? " (search to narrow results)" : ""}`;
+      }
+      ["feeSearch", "feeCampus", "feeType", "feeStatus"].forEach((id) =>
+        document
+          .getElementById(id)
+          .addEventListener(
+            id === "feeSearch" ? "input" : "change",
+            renderFees,
+          ),
+      );
+      function updatePaymentLimit() {
+        const id = document.getElementById("paymentStudentId").value,
+          s = students.find((x) => x.id === id),
+          type = document.getElementById("paymentFeeType").value;
+        if (!s) return;
+        const n = getFeeNumbers(s, type),
+          balance = Math.max(0, n.fee - n.paid);
+        document.getElementById("paymentAmount").value = balance ? balance : "";
+        document.getElementById("paymentAmount").max = balance;
+        document.getElementById("paymentStudentInfo").textContent =
+          `${s.name} · ${s.id} · ${FEE_TYPES[type]} balance: ${money(balance)}`;
+      }
+      function openPayment(id) {
+        const s = students.find((x) => x.id === id);
+        if (!s) return;
+        document.getElementById("paymentStudentId").value = id;
+        const current = document.getElementById("feeType").value;
+        document.getElementById("paymentFeeType").value =
+          current !== "All" ? current : "tuition";
+        updatePaymentLimit();
+        document.getElementById("paymentModal").classList.add("show");
+      }
+      document
+        .getElementById("paymentFeeType")
+        .addEventListener("change", updatePaymentLimit);
+      function closePayment() {
+        document.getElementById("paymentModal").classList.remove("show");
+      }
+      document.getElementById("paymentForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = document.getElementById("paymentStudentId").value,
+          s = students.find((x) => x.id === id),
+          amount = Number(document.getElementById("paymentAmount").value),
+          type = document.getElementById("paymentFeeType").value,
+          n = s ? getFeeNumbers(s, type) : { fee: 0, paid: 0 };
+        if (!s || amount <= 0 || amount > Math.max(0, n.fee - n.paid)) {
+          toast("Enter a valid amount up to the selected fee balance.");
+          return;
+        }
+        s.paid = Math.min(s.fee, s.paid + amount);
+        payments.push({
+          id: "PAY-" + Date.now(),
+          studentId: id,
+          feeType: type,
+          amount,
+          method: document.getElementById("paymentMethod").value,
+          date: new Date().toISOString(),
+        });
+        saveData();
+        closePayment();
+        refreshAll();
+        renderFees();
+        toast(FEE_TYPES[type] + " payment recorded in this browser demo.");
+      });
+      function renderAttendance() {
+        let list = filteredCampus(students, "attendanceCampus"),
+          q = document.getElementById("attendanceSearch").value.toLowerCase(),
+          st = document.getElementById("attendanceStatus").value;
+        const avg = list.length
+          ? sum(list, (s) => s.attendance) / list.length
+          : 0;
+        document.getElementById("attAverage").textContent =
+          avg.toFixed(1) + "%";
+        document.getElementById("attRisk").textContent = fmt(
+          list.filter((s) => s.attendance < threshold).length,
+        );
+        document.getElementById("attTotal").textContent = fmt(list.length);
+        list = list.filter(
+          (s) =>
+            (!q ||
+              s.name.toLowerCase().includes(q) ||
+              s.id.toLowerCase().includes(q)) &&
+            (st === "All" ||
+              (st === "Risk"
+                ? s.attendance < threshold
+                : s.attendance >= threshold)),
+        );
+        document.getElementById("attendanceRows").innerHTML =
+          list
+            .slice(0, 200)
+            .map(
+              (s) =>
+                `<tr><td><div class="student-name">${escapeHTML(s.name)}</div><div class="subtext">${s.id}</div></td><td>${escapeHTML(s.campus)}</td><td>${escapeHTML(s.programme)}</td><td><div style="display:flex;align-items:center;gap:9px"><div class="bar" style="width:90px"><span style="width:${s.attendance}%;background:${s.attendance < threshold ? "#dc4b43" : "#16845b"}"></span></div><strong>${s.attendance}%</strong></div></td><td>${attendanceBadge(s.attendance)}</td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="5" class="empty">No attendance records match your search.</td></tr>`;
+        document.getElementById("attendanceCount").textContent =
+          `Showing ${Math.min(list.length, 200)} of ${fmt(list.length)} records`;
+      }
+      ["attendanceSearch", "attendanceCampus", "attendanceStatus"].forEach(
+        (id) =>
+          document
+            .getElementById(id)
+            .addEventListener(
+              id === "attendanceSearch" ? "input" : "change",
+              renderAttendance,
+            ),
+      );
+      function renderHostel() {
+        let rows = CAMPUSES.map((c, i) => {
+          const allocated = Math.round(
+            HOSTEL_BEDS[i] * [0.81, 0.74, 0.82, 0.77, 0.76, 0.78][i],
+          );
+          return {
+            c,
+            beds: HOSTEL_BEDS[i],
+            allocated,
+            available: HOSTEL_BEDS[i] - allocated,
+          };
+        });
+        const total = sum(rows, (r) => r.beds),
+          alloc = sum(rows, (r) => r.allocated);
+        document.getElementById("hostelBeds").textContent = fmt(total);
+        document.getElementById("hostelAllocated").textContent = fmt(alloc);
+        document.getElementById("hostelAvailable").textContent = fmt(
+          total - alloc,
+        );
+        document.getElementById("hostelRate").textContent =
+          Math.round((alloc / total) * 100) + "%";
+        document.getElementById("hostelRows").innerHTML = rows
+          .map(
+            (r) =>
+              `<tr><td>${escapeHTML(r.c)}</td><td>${fmt(r.beds)}</td><td>${fmt(r.allocated)}</td><td>${fmt(r.available)}</td><td><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="width:95px"><span style="width:${(r.allocated / r.beds) * 100}%"></span></div>${Math.round((r.allocated / r.beds) * 100)}%</div></td></tr>`,
+          )
+          .join("");
+      }
+      function renderScholarships() {
+        document.getElementById("schCount").textContent = scholarships.length;
+        document.getElementById("schPending").textContent = scholarships.filter(
+          (s) => s.status !== "Approved",
+        ).length;
+        document.getElementById("schAmount").textContent = money(
+          sum(scholarships, (s) => s.amount),
+        );
+        document.getElementById("schRows").innerHTML =
+          scholarships
+            .map(
+              (s) =>
+                `<tr><td>${escapeHTML(s.id)}</td><td>${escapeHTML(s.studentId)}</td><td>${escapeHTML(s.campus)}</td><td>${escapeHTML(s.scheme)}</td><td>${money(s.amount)}</td><td>${statusBadge(s.status)}</td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="6" class="empty">No scholarship claims recorded.</td></tr>`;
+      }
+      function addScholarship() {
+        const s = students[Math.floor(Math.random() * students.length)];
+        const amount = Number(
+          prompt(
+            "Enter fictional scholarship claim amount in rupees:",
+            "15000",
+          ),
+        );
+        if (!Number.isFinite(amount) || amount <= 0) {
+          toast("No claim added. Enter a positive amount.");
+          return;
+        }
+        scholarships.push({
+          id: "CLM-" + String(scholarships.length + 1).padStart(3, "0"),
+          studentId: s.id,
+          campus: s.campus,
+          scheme: "Demo scholarship claim",
+          amount,
+          status: "Pending",
+        });
+        saveData();
+        renderScholarships();
+        toast("Sample scholarship claim added.");
+      }
+      function saveThreshold() {
+        const v = Number(document.getElementById("thresholdInput").value);
+        if (v < 1 || v > 100 || !Number.isFinite(v)) {
+          toast("Enter a threshold from 1 to 100.");
+          return;
+        }
+        threshold = v;
+        saveData();
+        refreshAll();
+        toast("Attendance threshold saved.");
+      }
+      function csvDownload(filename, rows) {
+        if (!rows.length) {
+          toast("No records to export.");
+          return;
+        }
+        const csv = rows
+          .map((row) =>
+            row
+              .map((v) => {
+                let s = String(v ?? "");
+                if (/^[=+\-@]/.test(s)) s = "'" + s;
+                return '"' + s.replace(/"/g, '""') + '"';
+              })
+              .join(","),
+          )
+          .join("\r\n");
+        const blob = new Blob(["\ufeff" + csv], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        toast("CSV export downloaded.");
+      }
+      function exportStudents() {
+        csvDownload("trust_students.csv", [
+          [
+            "Student ID",
+            "Name",
+            "Campus",
+            "Programme",
+            "Year",
+            "Email",
+            "Phone",
+            "Annual Fee",
+            "Paid",
+            "Balance",
+            "Attendance %",
+            "Status",
+          ],
+          ...students.map((s) => [
+            s.id,
+            s.name,
+            s.campus,
+            s.programme,
+            s.year,
+            s.email,
+            s.phone,
+            s.fee,
+            s.paid,
+            Math.max(0, s.fee - s.paid),
+            s.attendance,
+            s.status,
+          ]),
+        ]);
+      }
+      function exportFees() {
+        csvDownload("trust_fee_report.csv", [
+          [
+            "Student ID",
+            "Name",
+            "Campus",
+            "Tuition Fee",
+            "Tuition Paid",
+            "Tuition Balance",
+            "Bus Fee",
+            "Bus Paid",
+            "Bus Balance",
+            "Examination Fee",
+            "Examination Paid",
+            "Examination Balance",
+            "Hostel Fee",
+            "Hostel Paid",
+            "Hostel Balance",
+            "Total Fee",
+            "Total Paid",
+            "Total Balance",
+          ],
+          ...students.map((s) => {
+            const b = feeBreakdown(s);
+            return [
+              s.id,
+              s.name,
+              s.campus,
+              b.fees.tuition,
+              b.paid.tuition,
+              Math.max(0, b.fees.tuition - b.paid.tuition),
+              b.fees.bus,
+              b.paid.bus,
+              Math.max(0, b.fees.bus - b.paid.bus),
+              b.fees.examination,
+              b.paid.examination,
+              Math.max(0, b.fees.examination - b.paid.examination),
+              b.fees.hostel,
+              b.paid.hostel,
+              Math.max(0, b.fees.hostel - b.paid.hostel),
+              s.fee,
+              s.paid,
+              Math.max(0, s.fee - s.paid),
+            ];
+          }),
+        ]);
+      }
+      function exportAttendance() {
+        csvDownload("trust_attendance_report.csv", [
+          [
+            "Student ID",
+            "Name",
+            "Campus",
+            "Attendance %",
+            "Threshold %",
+            "Eligibility",
+          ],
+          ...students.map((s) => [
+            s.id,
+            s.name,
+            s.campus,
+            s.attendance,
+            threshold,
+            s.attendance < threshold ? "At risk" : "Eligible",
+          ]),
+        ]);
+      }
+      function exportHostel() {
+        csvDownload("trust_hostel_report.csv", [
+          [
+            "Campus",
+            "Total Beds",
+            "Allocated Beds",
+            "Available Beds",
+            "Occupancy %",
+          ],
+          ...CAMPUSES.map((c, i) => {
+            const a = Math.round(
+              HOSTEL_BEDS[i] * [0.81, 0.74, 0.82, 0.77, 0.76, 0.78][i],
+            );
+            return [
+              c,
+              HOSTEL_BEDS[i],
+              a,
+              HOSTEL_BEDS[i] - a,
+              Math.round((a / HOSTEL_BEDS[i]) * 100),
+            ];
+          }),
+        ]);
+      }
+      function refreshAll() {
+        renderDashboard();
+        renderAdmissions();
+        renderFees();
+        renderAttendance();
+        renderHostel();
+        renderScholarships();
+        if (document.getElementById("students").classList.contains("active"))
+          renderStudents();
+      }
+      function resetDemo() {
+        if (
+          !confirm(
+            "Restore 14,000 synthetic student records? Your local changes will be replaced.",
+          )
+        )
+          return;
+        students = Array.from({ length: 14000 }, (_, i) => makeStudent(i));
+        payments = [];
+        scholarships = [
+          {
+            id: "CLM-001",
+            studentId: "TR00120",
+            campus: CAMPUSES[0],
+            scheme: "Government scholarship",
+            amount: 18000,
+            status: "Pending",
+          },
+          {
+            id: "CLM-002",
+            studentId: "TR03522",
+            campus: CAMPUSES[2],
+            scheme: "Fee reimbursement",
+            amount: 12500,
+            status: "Under review",
+          },
+          {
+            id: "CLM-003",
+            studentId: "TR07840",
+            campus: CAMPUSES[4],
+            scheme: "Merit scholarship",
+            amount: 20000,
+            status: "Approved",
+          },
+        ];
+        threshold = 75;
+        saveData();
+        document.getElementById("thresholdInput").value = 75;
+        refreshAll();
+        toast("Demo data restored.");
+      }
+      function clearData() {
+        if (
+          !confirm(
+            "Clear this app's saved browser data? You can restore demo data afterward.",
+          )
+        )
+          return;
+        localStorage.removeItem("trustCampusStudents");
+        localStorage.removeItem("trustCampusPayments");
+        localStorage.removeItem("trustCampusScholarships");
+        localStorage.removeItem("trustCampusThreshold");
+        students = [];
+        payments = [];
+        scholarships = [];
+        refreshAll();
+        toast(
+          "Browser data cleared. Use Restore demo data to reload sample records.",
+        );
+      }
+      function toast(msg) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.remove("show");
+        void el.offsetWidth;
+        el.classList.add("show");
+      }
+      document.getElementById("studentModal").addEventListener("click", (e) => {
+        if (e.target.id === "studentModal") closeModal();
+      });
+      document.getElementById("paymentModal").addEventListener("click", (e) => {
+        if (e.target.id === "paymentModal") closePayment();
+      });
+      loadData();
+      initSelects();
+      document.getElementById("thresholdInput").value = threshold;
+      renderDashboard();
+      renderAdmissions();
+      renderFees();
+      renderAttendance();
+      renderHostel();
+      renderScholarships();
+    </script>
+  </body>
+</html>
